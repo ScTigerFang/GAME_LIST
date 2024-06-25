@@ -1,0 +1,71 @@
+exports.up = function (knex) {
+  return knex("tags").insert([
+    { name: "RPG" }, // Role-Playing Game
+    { name: "Open World" },
+    { name: "Multiplayer" },
+    { name: "Souls-Like" },
+    { name: "Roguelike" },
+    { name: "Wife Approval" },
+    { name: "Child Friendly" },
+    { name: "RTS" },
+    { name: "Base Building" },
+    { name: "Turn Based" },
+    { name: "Survival" },
+    { name: "4X" },
+    { name: "Good-ByE Real Life(MMOs)" },
+    { name: "MOBA" },
+    { name: "Fantasy" },
+    { name: "Strategy" },
+    { name: "First-Person Shooter" }, // FPS
+    { name: "Indie" },
+    { name: "Adventure" },
+    { name: "Pokemon" },
+    { name: "Simulation" },
+    { name: "Horror" },
+    { name: "Puzzle" },
+    { name: "Platformer" },
+    { name: "Sports" },
+    { name: "Racing" },
+    { name: "Battle Royale" },
+    { name: "Educational" },
+    { name: "Fighting" },
+    { name: "Retro" },
+  ]);
+};
+
+exports.down = function (knex) {
+  return knex("tags")
+    .whereIn("name", [
+      "RPG",
+      "Open World",
+      "Multiplayer",
+      "Souls-Like",
+      "Roguelike",
+      "Wife Approval",
+      "Child Friendly",
+      "RTS",
+      "Base Building",
+      "Turn Based",
+      "Survival",
+      "4X",
+      "Good-ByE Real Life(MMOs)",
+      "MOBA",
+      "Fantasy",
+      "Strategy",
+      "First-Person Shooter",
+      "Indie",
+      "Adventure",
+      "Pokemon",
+      "Simulation",
+      "Horror",
+      "Puzzle",
+      "Platformer",
+      "Sports",
+      "Racing",
+      "Battle Royale",
+      "Educational",
+      "Fighting",
+      "Retro",
+    ])
+    .del();
+};

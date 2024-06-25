@@ -1,0 +1,36 @@
+{
+  "name": "game-list-tracker-backend",
+  "version": "1.0.0",
+  "description": "A full-stack application designed to keep track of video games in a tier-list format, allowing users to add, remove, update, and categorize games with various details.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ScTigerFang/GAME_LIST.git"
+  },
+  "keywords": [
+    "game",
+    "tracker",
+    "nodejs",
+    "express",
+    "react",
+    "sqlite"
+  ],
+  "author": "Daniel Beals <danielbealsprofemail@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "knex": "^3.1.0",
+    "sqlite3": "^5.1.7",
+    "react": "^18.1.0"
+  },
+  "bugs": {
+    "url": "https://github.com/ScTigerFang/GAME_LIST/issues"
+  },
+  "homepage": "https://github.com/ScTigerFang/GAME_LIST#readme"
+}

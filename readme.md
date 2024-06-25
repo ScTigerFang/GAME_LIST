@@ -25,8 +25,8 @@ The Game List Tracker is a simple full-stack application designed to keep track 
 
 ```
 
-git clone https://github.com/sctigerfang/gamelist-tracker.git
-cd gamelist-tracker
+git clone https://github.com/ScTigerFang/GAME_LIST.git
+cd GAME_LIST
 ```
 
 2. **Install Dependencies**
