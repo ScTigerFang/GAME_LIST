@@ -1,0 +1,39 @@
+body {
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  background-color: #121212; /* Dark background */
+  color: #e0e0e0; /* Light grey text for contrast */
+}
+
+.App {
+  text-align: center;
+  padding: 20px;
+}
+
+.App-header {
+  background-color: #333;
+  padding: 20px;
+  color: white;
+}
+
+/* Responsive font size */
+html {
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 12px;
+  }
+}
+
+/* DataGrid styling adjustments for less spacing */
+.MuiDataGrid-root .MuiDataGrid-cell {
+  padding: 8px; /* Reduce padding inside cells */
+}

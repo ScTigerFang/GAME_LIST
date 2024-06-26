@@ -36,7 +36,19 @@ exports.createGame = async (req, res) => {
 exports.getAllGames = async (req, res) => {
   try {
     const games = await db("games").select("*");
-    res.status(200).json(games);
+    const gamesWithTags = await Promise.all(
+      games.map(async (game) => {
+        const tags = await db("tags")
+          .join("game_tags", "tags.id", "game_tags.tag_id")
+          .where("game_tags.game_id", game.id)
+          .select("tags.name");
+        return {
+          ...game,
+          tags: tags.map((tag) => tag.name),
+        };
+      })
+    );
+    res.status(200).json(gamesWithTags);
   } catch (error) {
     res
       .status(500)
