@@ -35,22 +35,21 @@ const columns = [
   { field: "notes", headerName: "Notes", width: 200 },
 ];
 
-export default function GameTable() {
+export default function GameTable({ refreshCounter }) {
   const [games, setGames] = useState([]);
 
   useEffect(() => {
     fetch("http://127.0.0.1:6969/api/games")
       .then((response) => response.json())
       .then((data) => {
-        const processedData = data.map((game, index) => ({
+        const processedData = data.map((game) => ({
           ...game,
-          id: index + 1,
           tags: game.tags ? game.tags.join(", ") : "",
         }));
         setGames(processedData);
       })
       .catch((error) => console.error("Error fetching games:", error));
-  }, []);
+  }, [refreshCounter]); // Dependency on refreshCounter triggers re-fetch
 
   return (
     <div style={{ height: 400, width: "100%" }}>

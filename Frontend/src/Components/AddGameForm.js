@@ -84,7 +84,7 @@ function AddGameForm({ open, onClose, onSave, allTags }) {
             <Grid item xs={12}>
               <Autocomplete
                 multiple
-                options={allTags.map((tag) => tag.name)}
+                options={allTags.map((tag) => tag.name || "")}
                 freeSolo
                 getOptionLabel={(option) => option}
                 onChange={handleTagsChange}
