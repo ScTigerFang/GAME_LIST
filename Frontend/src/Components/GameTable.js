@@ -98,7 +98,7 @@ export default function GameTable({
       })
         .then(() => {
           handleClick("Game deleted successfully.");
-          setGames(games.filter((game) => game.id !== id)); // Optimistically remove the game from UI
+          setGames(games.filter((game) => game.id !== id));
         })
         .catch((error) => {
           console.error("Failed to delete game:", error);
