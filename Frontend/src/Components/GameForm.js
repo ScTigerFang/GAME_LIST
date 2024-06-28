@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   Box,
@@ -9,8 +9,8 @@ import {
   Grid,
 } from "@mui/material";
 
-function AddGameForm({ open, onClose, onSave, allTags }) {
-  const [gameDetails, setGameDetails] = useState({
+function GameForm({ open, onClose, onSave, allTags, initialGameData }) {
+  const initialState = {
     name: "",
     gameplay: "",
     graphics: "",
@@ -21,7 +21,31 @@ function AddGameForm({ open, onClose, onSave, allTags }) {
     learning_ease: "",
     notes: "",
     tags: [],
-  });
+  };
+
+  const [gameDetails, setGameDetails] = useState(initialState);
+
+  // Initialize form state when initialGameData changes
+  useEffect(() => {
+    if (initialGameData) {
+      setGameDetails({
+        name: initialGameData.name,
+        gameplay: initialGameData.gameplay || "",
+        graphics: initialGameData.graphics || "",
+        sound_design: initialGameData.sound_design || "",
+        storyline: initialGameData.storyline || "",
+        replayability: initialGameData.replayability || "",
+        multiplayer: initialGameData.multiplayer || "",
+        learning_ease: initialGameData.learning_ease || "",
+        notes: initialGameData.notes || "",
+        tags: Array.isArray(initialGameData.tags)
+          ? initialGameData.tags
+          : initialGameData.tags.split(", "), // Split tags by comma if not already an array
+      });
+    } else {
+      setGameDetails(initialState);
+    }
+  }, [initialGameData, open]);
 
   const handleChange = (e) => {
     setGameDetails({ ...gameDetails, [e.target.name]: e.target.value });
@@ -34,8 +58,10 @@ function AddGameForm({ open, onClose, onSave, allTags }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     onSave(gameDetails);
-    onClose(); // Close modal on save
+    onClose();
   };
+
+  const isEditing = !!initialGameData;
 
   // Calculate total score
   const totalScore = [
@@ -68,7 +94,7 @@ function AddGameForm({ open, onClose, onSave, allTags }) {
             {/* Row 1: Title and Name */}
             <Grid item xs={12}>
               <Typography variant="h6" component="h2">
-                Add New Game
+                {isEditing ? "Edit Game" : "Add New Game"}
               </Typography>
               <TextField
                 fullWidth
@@ -84,18 +110,14 @@ function AddGameForm({ open, onClose, onSave, allTags }) {
             <Grid item xs={12}>
               <Autocomplete
                 multiple
-                options={allTags.map((tag) => tag.name || "")}
+                value={gameDetails.tags}
+                onChange={(event, newValue) => {
+                  setGameDetails({ ...gameDetails, tags: newValue });
+                }}
+                options={allTags.map((tag) => tag.name)}
                 freeSolo
-                getOptionLabel={(option) => option}
-                onChange={handleTagsChange}
                 renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    fullWidth
-                    variant="outlined"
-                    label="Tags"
-                    placeholder="Select or create tags"
-                  />
+                  <TextField {...params} variant="outlined" label="Tags" />
                 )}
               />
             </Grid>
@@ -197,7 +219,7 @@ function AddGameForm({ open, onClose, onSave, allTags }) {
             {/* Row 8: Add Game Button */}
             <Grid item xs={12}>
               <Button type="submit" color="primary" variant="contained">
-                Add Game
+                {isEditing ? "Update Game" : "Add Game"}
               </Button>
             </Grid>
           </Grid>
@@ -207,4 +229,4 @@ function AddGameForm({ open, onClose, onSave, allTags }) {
   );
 }
 
-export default AddGameForm;
+export default GameForm;

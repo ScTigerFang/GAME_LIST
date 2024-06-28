@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import Theme from "./Theme";
 import GameTable from "./Components/GameTable";
-import AddGameForm from "./Components/AddGameForm";
+import GameForm from "./Components/GameForm";
 import { Button } from "@mui/material";
 
 function App() {
   const [modalOpen, setModalOpen] = useState(false);
+  const [selectedGame, setSelectedGame] = useState(null); // Manage selected game
   const [tags, setTags] = useState([]);
   const [refreshCounter, setRefreshCounter] = useState(0);
 
@@ -25,32 +26,27 @@ function App() {
   }, []); // Empty dependency array to run only on component mount
 
   const handleSaveGame = (gameDetails) => {
-    console.log("Saving game with details:", gameDetails);
+    const url = selectedGame
+      ? `http://127.0.0.1:6969/api/games/${selectedGame.id}`
+      : "http://127.0.0.1:6969/api/games";
+    const method = selectedGame ? "PUT" : "POST";
+    const tags = gameDetails.tags.map((tag) =>
+      typeof tag === "object" ? tag.name : tag
+    ); // Ensure tags are in the correct format
 
-    fetch("http://127.0.0.1:6969/api/games", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+    fetch(url, {
+      method: method,
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        name: gameDetails.name,
-        gameplay: parseInt(gameDetails.gameplay, 10),
-        graphics: parseInt(gameDetails.graphics, 10),
-        sound_design: parseInt(gameDetails.sound_design, 10),
-        storyline: parseInt(gameDetails.storyline, 10),
-        replayability: parseInt(gameDetails.replayability, 10),
-        multiplayer: parseInt(gameDetails.multiplayer, 10),
-        learning_ease: parseInt(gameDetails.learning_ease, 10),
-        notes: gameDetails.notes,
-        tags: gameDetails.tags.map((tag) =>
-          typeof tag === "string" ? tag : tag.name
-        ), // Ensuring tag names are sent as strings
+        ...gameDetails,
+        tags,
       }),
     })
       .then((response) => response.json())
-      .then((data) => {
-        console.log("Game saved successfully:", data);
-        setRefreshCounter((prev) => prev + 1); // Increment to trigger re-fetch in GameTable
+      .then(() => {
+        setModalOpen(false);
+        setRefreshCounter((prev) => prev + 1); // Trigger refresh
+        setSelectedGame(null); // Reset selected game
       })
       .catch((error) => {
         console.error("Error saving game:", error);
@@ -62,15 +58,30 @@ function App() {
       <div className="App">
         <header className="App-header">
           <h1>Game List Tracker</h1>
-          <Button onClick={() => setModalOpen(true)}>Add New Game</Button>
+          <Button
+            onClick={() => {
+              setModalOpen(true);
+              setSelectedGame(null); // Reset for adding new game
+            }}
+          >
+            Add New Game
+          </Button>
         </header>
-        <AddGameForm
+        <GameForm
           open={modalOpen}
-          onClose={() => setModalOpen(false)}
+          onClose={() => {
+            setModalOpen(false);
+            setSelectedGame(null);
+          }}
           onSave={handleSaveGame}
           allTags={tags}
-        />{" "}
-        <GameTable refreshCounter={refreshCounter} />
+          initialGameData={selectedGame}
+        />
+        <GameTable
+          refreshCounter={refreshCounter}
+          setModalOpen={setModalOpen}
+          setSelectedGame={setSelectedGame}
+        />
       </div>
     </Theme>
   );
