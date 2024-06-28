@@ -61,12 +61,10 @@ export default function GameTable({
 
   useEffect(() => {
     if (snackPack.length && !messageInfo) {
-      // Set a new snack when we add one
       setMessageInfo({ ...snackPack[0] });
       setSnackPack((prev) => prev.slice(1));
       setOpen(true);
     } else if (snackPack.length && messageInfo && open) {
-      // Close an old snack when a new one is added
       setOpen(false);
     }
   }, [snackPack, messageInfo, open]);
@@ -76,15 +74,11 @@ export default function GameTable({
   };
 
   const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
+    if (reason === "clickaway") return;
     setOpen(false);
   };
 
-  const handleExited = () => {
-    setMessageInfo(undefined);
-  };
+  const handleExited = () => setMessageInfo(undefined);
 
   const handleEdit = (game) => {
     setSelectedGame(game);
@@ -93,12 +87,10 @@ export default function GameTable({
 
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you want to delete this game?")) {
-      fetch(`http://127.0.0.1:6969/api/games/${id}`, {
-        method: "DELETE",
-      })
+      fetch(`http://127.0.0.1:6969/api/games/${id}`, { method: "DELETE" })
         .then(() => {
           handleClick("Game deleted successfully.");
-          setGames(games.filter((game) => game.id !== id));
+          setGames((prevGames) => prevGames.filter((game) => game.id !== id));
         })
         .catch((error) => {
           console.error("Failed to delete game:", error);
@@ -146,10 +138,7 @@ export default function GameTable({
       />
       <Snackbar
         key={messageInfo ? messageInfo.key : undefined}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
         open={open}
         autoHideDuration={6000}
         onClose={handleClose}
